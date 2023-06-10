@@ -247,3 +247,7 @@ curl https://www.example.com
 ```
 
 Congratulations! You have successfully tested the certificate and configured Nginx to use it.
+
+
+# Testing 
+
