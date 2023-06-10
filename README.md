@@ -128,7 +128,7 @@ openssl x509 -noout -in ../sub-ca/certs/sub-ca.crt -text
 
 Show the structure of the certificates created using the **tree** command.
 
-![alt text](https://github.com/attajunyah/zero-trust-short-lived/blob/main/images/pki-tree-structure.jpeg?raw=true)
+![alt text](https://github.com/Group-8-CS-533/Short-Lived-Certificate-Zero-Trust/blob/main/images/pki-tree-structure.jpeg?raw=true)
 
 ### Generating ServerA Certificate
 
@@ -256,11 +256,11 @@ During our testing phase, we utilized servers without a graphical user interface
 
 To test our web server configured on serverA, we used the curl client. Inside the serverA configuration file, we included the necessary certificate and implemented an access control code block within the server block. This code block verifies the credentials of the presented certificate. If the curl client is used to access the insecure website, the HTML document of example.com will be displayed.
 
-![image of certificate not working](https://github.com/attajunyah/zero-trust-short-lived/blob/main/images/certificate-not-working.jpeg?raw=true)
+![image of certificate not working](https://github.com/Group-8-CS-533/Short-Lived-Certificate-Zero-Trust/blob/main/images/certificate-not-working.jpeg?raw=true)
 
 However, we configured the nginx web server to point to our customized index.html file and display its contents. When using the curl command with the URL "https://www.example.com", instead of the original or default example.com page, we obtained the index of our HTML file. This outcome confirms that our certificate is functioning correctly.
 
-![image of certificate now working](https://github.com/attajunyah/zero-trust-short-lived/blob/main/images/working-certificate.jpeg?raw=true)
+![image of certificate now working](https://github.com/Group-8-CS-533/Short-Lived-Certificate-Zero-Trust/blob/main/images/working-certificate.jpeg?raw=true)
 
 After the specified certificate validity period of 15 minutes, we attempted the same access using the curl client on the client's machine. At this point, the default password is displayed, indicating that the certificate has expired.
 
