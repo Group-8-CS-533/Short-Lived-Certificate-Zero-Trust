@@ -2,6 +2,12 @@
 
 This documentation provides a step-by-step guide on short-lived authentication using the Zero Trust Model.
 
+This is the image of our poster.
+
+![alt text](https://github.com/Group-8-CS-533/Short-Lived-Certificate-Zero-Trust/blob/main/images/poster.png?raw=true)
+
+
+
 ## Server B Public Key Infrastructure (PKI)
 
 ### Creating Directories Needed for our Certificate Authority
@@ -128,7 +134,7 @@ openssl x509 -noout -in ../sub-ca/certs/sub-ca.crt -text
 
 Show the structure of the certificates created using the **tree** command.
 
-![alt text](https://github.com/Group-8-CS-533/Short-Lived-Certificate-Zero-Trust/blob/main/images/pki-tree-structure.jpeg?raw=true)
+![tree structure](https://github.com/Group-8-CS-533/Short-Lived-Certificate-Zero-Trust/blob/main/images/pki-tree-structure.jpeg?raw=true)
 
 ### Generating ServerA Certificate
 
