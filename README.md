@@ -186,13 +186,15 @@ cat serverA.crt ../../sub-ca/certs/sub-ca.crt > chained.crt
 The hostname on the certificate must match the configured certificate.
 
 ```bash
-echo "127.0.0.2 www.trustzerd.com" >> /etc/hosts
-ping www.trustzerd.com
+echo "127.0.0.2 www.example.com" >> /etc/hosts
+ping www.example.com
 ```
 
-#### Different Testing Methods
+### Different Testing Methods
 
-##### Testing with OpenSSL
+#### Testing with OpenSSL
+
+
 
 Open two terminal windows. In the **first window**, start the server.
 
@@ -203,12 +205,12 @@ openssl s_server -accept 443 -www -key private/server.key -cert certs/server.crt
 In the **second window**, run the following command to test the server using cURL:
 
 ```bash
-curl https://trustzedo.com
+curl https://example.com
 ```
 
 Since the operating system does not trust the root CA, the connection will fail.
 
-To trust the root CA, copy the ca.crt file to the appropriate directory. The exact directory location depends on the operating system. In this example, we assume the directory is `/etc/pki/trust/anchors/`.
+To trust the root CA, copy the `ca.crt` file to the appropriate directory. The exact directory location depends on the operating system. In this example, the directory is `/etc/pki/trust/anchors/`.
 
 ```bash
 cp ca/root-ca/certs/ca.crt /etc/pki/trust/anchors/
@@ -223,12 +225,28 @@ sudo update-ca-trust
 Rerun the cURL command to test the connection:
 
 ```bash
-curl https://trustzedo.com
+curl https://example.com
 ```
 
-##### Configuring
+### Nginx Setup
 
- Nginx
+To compress our configuration in the Nginx configuration file, we mapped Nginx to extract the `certificate issuer`, `state`, `canonical name`, and `email address` of each client presenting their certificate. We then compare this information with the certificate issuer, which is our Certificate Authority (CA), and reject any client that presents a certificate not issued by our CA. 
+
+To transfer the required keys for nginx configuration, we need to configure SSH in serverB and copy the public key of serverB to the authorized files. 
+
+```bash
+ssh-keygen -t rsa -b 4096
+```
+
+```bash
+ssh-copy-id @serverAipaddress 
+```
+
+```bash
+scp path/to/required_keys serverAusername@serverAipaddress:path/to/destination-folder
+```
+
+We also securely transferred the `ca.crt`, `serverA.crt`, `serverA.key` and `chained.crt` (concatenation of the `sub-ca.crt` and `serverA.crt`) using Scp (Secure Copy Protocol).
 
 Edit the Nginx configuration file:
 
@@ -236,10 +254,10 @@ Edit the Nginx configuration file:
 nano /etc/nginx/nginx.conf
 ```
 
-Scroll down to the http section and uncomment the following lines:
+Scroll down to the `ssl` section and uncomment the following lines:
 
 ```nginx
-server_name www.trustzedo.com;
+server_name www.example.com;
 ssl_certificate /root/ca/server/certs/chained.crt;
 ssl_certificate_key /root/ca/server/private/server.key;
 ```
@@ -247,11 +265,30 @@ ssl_certificate_key /root/ca/server/private/server.key;
 Save the changes and restart the Nginx web server:
 
 ```bash
-echo hello > /srv/www/htdocs/index.html
-curl https://www.example.com
+sudo systemctl restart nginx 
+or 
+sudo nginx -s reload
 ```
 
-Congratulations! You have successfully tested the certificate and configured Nginx to use it.
+```bash
+echo "
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Short Lived Configuration Test</title>
+</head>
+<body>
+    <h1>We are Testing the short-lived certificate</h1>
+    <h2>Hello there, your Short Lived Configuration is working effectively.</h2>
+</body>
+</html>
+
+" > /srv/www/htdocs/index.html
+```
+
+```bash
+curl https://www.example.com
+```
 
 
 # Testing 
@@ -267,6 +304,6 @@ However, we configured the nginx web server to point to our customized index.htm
 
 ![image of certificate now working](https://github.com/Group-8-CS-533/Short-Lived-Certificate-Zero-Trust/blob/main/images/working-certificate.jpeg?raw=true)
 
-After the specified certificate validity period of 15 minutes, we attempted the same access using the curl client on the client's machine. At this point, the default password is displayed, indicating that the certificate has expired.
+After the specified certificate validity period of 15 minutes, we attempted the same access using the curl client on the client's machine. At this point, the default `example.com` is displayed, indicating that the certificate has expired.
 
 Furthermore, the server also verifies if the certificate originates from the root CA and if it matches the client's name. If these conditions are not met, the example.com page will display the default HTML file.
