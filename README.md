@@ -7,7 +7,6 @@ This is the image of our poster.
 ![alt text](https://github.com/Group-8-CS-533/Short-Lived-Certificate-Zero-Trust/blob/main/images/poster.png?raw=true)
 
 
-
 ## Server B Public Key Infrastructure (PKI)
 
 ### Creating Directories Needed for our Certificate Authority
