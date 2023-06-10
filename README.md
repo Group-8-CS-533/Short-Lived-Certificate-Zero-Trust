@@ -128,6 +128,8 @@ openssl x509 -noout -in ../sub-ca/certs/sub-ca.crt -text
 
 Show the structure of the certificates created using the **tree** command.
 
+![alt text](https://github.com/attajunyah/zero-trust-short-lived/blob/main/images/pki-tree-structure.jpeg?raw=true)
+
 ### Generating ServerA Certificate
 
 **Note:**
