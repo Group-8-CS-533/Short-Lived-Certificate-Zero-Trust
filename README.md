@@ -1,5 +1,7 @@
 # Documentation
 
+## Short-lived Certificate Authentication in Zero Trust Model
+
 This documentation provides a step-by-step guide on short-lived authentication using the Zero Trust Model.
 
 This is the image of our poster.
